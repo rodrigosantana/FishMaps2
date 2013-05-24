@@ -1,4 +1,5 @@
 levelmap <- function(x, data, xlim, ylim, lev, jump,
+                     key.space = "right",
                      database = "world", ...){
     ## Base de dados para os mapas
     mm <- maps::map(database = database, plot = FALSE, fill = TRUE)
@@ -35,15 +36,16 @@ levelmap <- function(x, data, xlim, ylim, lev, jump,
               scales = list(x = list(at = labsx, labels = labsxc),
                   y = list(at = labsy, labels = labsyc)),
               strip = strip.custom(bg = "lightgrey"),
-              at = lev, colorkey = list(space="top"),
-              col.regions = grey.colors(length(lev)-1, start = 0.7, end = 0.1),
-              par.settings = list(layout.heights =
-                  list(top.padding = 0, bottom.padding = 0)),
+              at = lev, colorkey = list(space = key.space),
+              col.regions = grey.colors(length(lev)-1,
+                  start = 0.7, end = 0.1),
+              par.settings = list(layout.heights = list(top.padding = 0,
+                                      bottom.padding = 0)),
               panel = function(x, y, z, mm, ...){
                   panel.levelplot(x, y, z, ...)
                   panel.grid(h = -length(labsx), v = -length(labsy), ...)
                   #panel.lines(mm$x, mm$y, col = "black")
-                  panel.polygon(mm$x, mm$y, border = "black", col = "lightgrey")
+                  panel.polygon(mm$x, mm$y, border = "black", col = "snow")
                   panel.zero.points(x, y, z, ...)
               })
 }

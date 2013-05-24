@@ -8,15 +8,15 @@
 ##----------------------------------------------------------------------
 
 # tamanho amostral por ano e trimestre
-mapa.latt <- read.csv("./datasets/mapa.latt.csv")
+mapa.latt <- read.csv("../data/mapa.latt.csv")
 # tamanho amostral por trimestre
-mapa.latt.q <- read.csv("./datasets/mapa.latt.q.csv")
+mapa.latt.q <- read.csv("../data/mapa.latt.q.csv")
 # captura whm por trimestre
-mapa.whm <- read.csv("./datasets/mapa.whm.csv")
+mapa.whm <- read.csv("../data/mapa.whm.csv")
 # captura bum por trimestre
-mapa.bum <- read.csv("./datasets/mapa.bum.csv")
+mapa.bum <- read.csv("../data/mapa.bum.csv")
 # captura conjunta (whm e bum) por trimestre
-mapa.conj <- read.csv("./datasets/mapa.conj.csv")
+mapa.conj <- read.csv("../data/mapa.conj.csv")
 
 
 ##----------------------------------------------------------------------
@@ -26,7 +26,7 @@ mapa.conj <- read.csv("./datasets/mapa.conj.csv")
 
 # base de dados para o mapa
 library(maps)
-mm <- map("world", plot = FALSE)
+mm <- map("world", plot = FALSE, fill = TRUE)
 
 # define os ranges do mapa, e os labels para colocar nos graficos
 # aqui estao soh as defincoes para os maps do atlantico sul ,baseado no
@@ -46,7 +46,7 @@ labsyc[seq(2, length(labsyc), 2)] <- ""
 # se houver um valor nulo e um positivo no mesmo quadrado, o ponto vai
 # ser adicionado junto com a cor do levelplot, pois nao consigui fazer
 # ele distinguir se naquele ponto houve algum outro valor que foi
-# positivo. Isso implica em que geralmente sera nexessario fazer um
+# positivo. Isso implica em que geralmente sera necessario fazer um
 # aggregate antes de plotar os dados para que nao haja esse tipo de
 # sobreposicao. (Essa funcao foi baseada na panel.corrgram.2() da Figura
 # 13.5 do livro do Lattice - o codigo esta no site).
@@ -57,13 +57,13 @@ panel.zero.points <- function(x, y, z, subscripts, ...){
     z <- as.numeric(z)[subscripts]
     for(i in seq(along = z)){
         if(z[i] == 0L){
-            grid.points(x = x[i], y = y[i], pch = "+")
+            grid.points(x = x[i], y = y[i], pch = 3,
+                        size = unit(1, "native"))
         } else{
             grid.points(x = x[i], y = y[i], pch = "")
         }
     }
 }
-
 ##----------------------------------------------------------------------
 
 
@@ -89,7 +89,7 @@ levc[1] <- ""
 # define a quebra dos anos
 anos <- round(do.breaks(range(mapa.latt$YearC), 13))
 
-# print eh necessario quando uma funcao do çattice eh usada dentro do
+# print eh necessario quando uma funcao do lattice eh usada dentro do
 # for()
 for(i in 2:length(anos)){
 print(levelplot(x ~ Lon3 + Lat3 | factor(YearC) + factor(Quarter),
@@ -174,7 +174,7 @@ levelplot(x ~ Lon3 + Lat3 | factor(Quarter),
           panel = function(x, y, z, mm, ...){
               panel.levelplot(x, y, z, ...)
               panel.grid(h = -length(labsx), v = -length(labsy), ...)
-              panel.lines(mm$x, mm$y, col = "black")
+              panel.polygon(mm$x, mm$y, border = "black", col = "snow")
               panel.zero.points(x, y, z, ...)
           })
 
