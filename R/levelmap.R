@@ -5,7 +5,7 @@ levelmap <- function(x, data, xlim, ylim, lev, jump,
     ## Base de dados para os mapas
     mm <- maps::map(database = database, plot = FALSE, fill = TRUE)
     ## Base de dados de batimetrias - lembrando que é requisito do
-    ## FishMaps2 o pacote marelac
+    ## FishMaps2 o pacote marelac!!
     if(bathymetry$bb == TRUE) {
         data(Bathymetry)
         prof <- contourLines(Bathymetry$x, Bathymetry$y, Bathymetry$z,
