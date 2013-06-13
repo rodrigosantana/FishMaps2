@@ -24,9 +24,22 @@ mapa.conj <- read.csv("../data/mapa.conj.csv")
 ## mapas que serao feitos
 ##----------------------------------------------------------------------
 
+# pacotes gráficos
+require(lattice)
+require(latticeExtra)
+
 # base de dados para o mapa
-library(maps)
-mm <- map("world", plot = FALSE, fill = TRUE)
+library(mapdata)
+mm <- map("worldHires", plot = FALSE, fill = TRUE)
+
+# base de dados de batimetria dos oceanos
+require(marelac)
+data(Bathymetry)
+
+## Transformação para utilizar no plot. nlevels definirá o intervalo de
+## batimetria plotada; nlevels = 26 - 500 em 500 m
+prof <- contourLines(Bathymetry$x, Bathymetry$y, Bathymetry$z, nlevels =
+                     5)
 
 # define os ranges do mapa, e os labels para colocar nos graficos
 # aqui estao soh as defincoes para os maps do atlantico sul ,baseado no
@@ -64,6 +77,26 @@ panel.zero.points <- function(x, y, z, subscripts, ...){
         }
     }
 }
+
+# Funcao adaptada da funcao panel.zero.points desenvolvida por Fernando
+# Mayer, que destina uma simbologia especifica para os casos de dados
+# não disponíveis (NA's)
+panel.na.points <- function(x, y, z, subscripts, ...){
+    require("grid", quietly = TRUE)
+    x <- as.numeric(x)[subscripts]
+    y <- as.numeric(y)[subscripts]
+    z <- as.numeric(z)[subscripts]
+    for(i in seq(along = z)){
+        if(is.na(z[i])) {
+            grid.points(x = x[i], y = y[i], pch = "-")
+        } else if(z[i] == 0L) {
+            grid.points(x = x[i], y = y[i], pch = "+")
+        } else {
+            grid.points(x = x[i], y = y[i], pch = "")
+        }
+    }
+}
+
 ##----------------------------------------------------------------------
 
 
@@ -126,8 +159,8 @@ levc[1] <- ""
 
 # levelplot
 ## pdf("mapa_tam_amostral_quarter.pdf", w=12, h=10)
-levelplot(x ~ Lon3 + Lat3 | factor(Quarter),
-          data = mapa.latt.q, mm = mm, aspect = "iso",
+levelplot(x ~ Lon3 + Lat3,
+          data = mapa.latt.q, prof = prof, mm = mm, aspect = "iso",
           as.table = TRUE, xlim = xlim, ylim = ylim,
           xlab = expression(paste("Longitude ", "(", degree, ")")),
           ylab = expression(paste("Latitude ", "(", degree, ")")),
@@ -137,10 +170,13 @@ levelplot(x ~ Lon3 + Lat3 | factor(Quarter),
           strip = strip.custom(bg = "lightgrey"),
           at = lev, col.regions = rev(grey.colors(length(lev)-1)),
           colorkey = list(space="right", labels=list(at=lev, labels=levc)),
-          panel = function(x, mm, ...){
+          panel = function(x, mm, prof, ...){
               panel.levelplot(x, ...)
               panel.grid(h = -length(labsx), v = -length(labsy), ...)
-              panel.lines(mm$x, mm$y, col = "black")
+              lapply(prof, llines, col = "blue")
+              sapply(prof, function(x) ltext(unique(x$x), unique(x$y),
+                                             labels = unique(x$level)))
+              panel.polygon(mm$x, mm$y, border = "black", col = "snow")
           })
 # dev.off()
 
@@ -161,7 +197,7 @@ lev[1] <- 1
 # (definida acima), serve para incluir os pontos onde existem dados
 # (inclusive os zeros)
 levelplot(x ~ Lon3 + Lat3 | factor(Quarter),
-          data = mapa.whm, mm = mm, aspect = "iso",
+          data = mapa.whm, add.cl = prof, mm = mm, aspect = "iso",
           as.table = TRUE, xlim = xlim, ylim = ylim,
           xlab = expression(paste("Longitude ", "(", degree, ")")),
           ylab = expression(paste("Latitude ", "(", degree, ")")),
@@ -171,12 +207,43 @@ levelplot(x ~ Lon3 + Lat3 | factor(Quarter),
           strip = strip.custom(bg = "lightgrey"),
           at = lev, col.regions = rev(grey.colors(length(lev)-1)),
           colorkey = list(space="right"),
-          panel = function(x, y, z, mm, ...){
+          panel = function(x, y, z, mm, add.cl, ...){
               panel.levelplot(x, y, z, ...)
               panel.grid(h = -length(labsx), v = -length(labsy), ...)
+              lapply(add.cl, panel.lines, border = "blue", lty = "dotted")
               panel.polygon(mm$x, mm$y, border = "black", col = "snow")
-              panel.zero.points(x, y, z, ...)
+              #panel.zero.points(x, y, z, ...)
+              panel.na.points(x, y, z, ...)
           })
+
+## Simulado uma planilha com Zeros e NA's
+teste <- mapa.whm
+
+# levelplot - NOTE que pelo fato dos niveis (lev) terem sido criados sem
+# a inclusao do zero e na's, o que faz com que os valores calculados e
+# plotados pelo levelplot nao incluam o zero, nem na's. A funcao
+# panel.na.points() (definida acima), serve para incluir os pontos onde
+# existem dados, onde não existem e inclusive os zeros
+levelplot(x ~ Lon3 + Lat3 | factor(Quarter),
+          data = teste, add.cl = prof, mm = mm, aspect = "iso",
+          as.table = TRUE, xlim = xlim, ylim = ylim,
+          xlab = expression(paste("Longitude ", "(", degree, ")")),
+          ylab = expression(paste("Latitude ", "(", degree, ")")),
+          between = list(x = c(1,1), y = c(1,1)), pretty = TRUE,
+          scales = list(x = list(at = labsx, labels = labsxc),
+          y = list(at = labsy, labels = labsyc)),
+          strip = strip.custom(bg = "lightgrey"),
+          at = lev, col.regions = rev(grey.colors(length(lev)-1)),
+          colorkey = list(space="right"),
+          panel = function(x, y, z, mm, add.cl, ...){
+              panel.levelplot(x, y, z, ...)
+              panel.grid(h = -length(labsx), v = -length(labsy), ...)
+              lapply(add.cl, panel.lines, border = "blue", lty = "dotted")
+              panel.polygon(mm$x, mm$y, border = "black", col = "snow")
+              #panel.zero.points(x, y, z, ...)
+              panel.na.points(x, y, z, ...)
+          })
+
 
 ##----------------------------------------------------------------------
 
@@ -191,7 +258,7 @@ lev[1] <- 1
 
 # levelplot
 levelplot(x ~ Lon3 + Lat3 | factor(Quarter),
-          data = mapa.bum, mm = mm, aspect = "iso",
+          data = mapa.bum, mm = mm, add.cl = prof, aspect = "iso",
           as.table = TRUE, xlim = xlim, ylim = ylim,
           xlab = expression(paste("Longitude ", "(", degree, ")")),
           ylab = expression(paste("Latitude ", "(", degree, ")")),
@@ -201,11 +268,13 @@ levelplot(x ~ Lon3 + Lat3 | factor(Quarter),
           strip = strip.custom(bg = "lightgrey"),
           at = lev, col.regions = rev(grey.colors(length(lev)-1)),
           colorkey = list(space="right"),
-          panel = function(x, y, z, mm, ...){
+          panel = function(x, y, z, mm, add.cl, ...){
               panel.levelplot(x, y, z, ...)
               panel.grid(h = -length(labsx), v = -length(labsy), ...)
-              panel.lines(mm$x, mm$y, col = "black")
-              panel.zero.points(x, y, z, ...)
+              lapply(add.cl, panel.lines, border = "blue", lty = "dotted")
+              panel.polygon(mm$x, mm$y, border = "black", col = "snow")
+              #panel.zero.points(x, y, z, ...)
+              panel.na.points(x, y, z, ...)
           })
 
 ##----------------------------------------------------------------------
@@ -221,7 +290,7 @@ lev[1] <- 1
 # levelplot
 # pdf("mapa_captura.pdf", w=12, h=10, paper="a4r")
 levelplot(WHM + BUM ~ Lon3 + Lat3 | factor(Quarter), outer = TRUE,
-          data = mapa.conj, mm = mm, aspect = "iso",
+          data = mapa.conj, mm = mm, add.cl = prof, aspect = "iso",
           as.table = TRUE, xlim = xlim, ylim = ylim,
           xlab = expression(paste("Longitude ", "(", degree, ")")),
           ylab = expression(paste("Latitude ", "(", degree, ")")),
@@ -231,10 +300,12 @@ levelplot(WHM + BUM ~ Lon3 + Lat3 | factor(Quarter), outer = TRUE,
           strip = strip.custom(bg = "lightgrey"),
           at = lev, col.regions = rev(grey.colors(length(lev)-1)),
           colorkey = list(space="right"),
-          panel = function(x, y, z, mm, ...){
+          panel = function(x, y, z, mm, add.cl, ...){
               panel.levelplot(x, y, z, ...)
               panel.grid(h = -length(labsx), v = -length(labsy), ...)
-              panel.lines(mm$x, mm$y, col = "black")
-              panel.zero.points(x, y, z, ...)
+              lapply(add.cl, panel.lines, border = "blue", lty = "dotted")
+              panel.polygon(mm$x, mm$y, border = "black", col = "snow")
+              #panel.zero.points(x, y, z, ...)
+              panel.na.points(x, y, z, ...)
           })
 # dev.off()
