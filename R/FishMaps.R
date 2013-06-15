@@ -30,16 +30,11 @@ require(latticeExtra)
 
 # base de dados para o mapa
 library(mapdata)
-mm <- map("worldHires", plot = FALSE, fill = TRUE)
+mm <- map("world", plot = FALSE, fill = TRUE)
 
 # base de dados de batimetria dos oceanos
 require(marelac)
 data(Bathymetry)
-
-## Transformação para utilizar no plot. nlevels definirá o intervalo de
-## batimetria plotada; nlevels = 26 - 500 em 500 m
-prof <- contourLines(Bathymetry$x, Bathymetry$y, Bathymetry$z, nlevels =
-                     5)
 
 # define os ranges do mapa, e os labels para colocar nos graficos
 # aqui estao soh as defincoes para os maps do atlantico sul ,baseado no
@@ -95,6 +90,14 @@ panel.na.points <- function(x, y, z, subscripts, ...){
             grid.points(x = x[i], y = y[i], pch = "")
         }
     }
+}
+
+# Funcao para determinar os labels das isobatas de profundidade que
+# serao plotadas no mapa
+isobath <- function(x, ...){
+    temp <- expand.grid(x$x, x$y)
+    temp2 <- data.frame(matrix(unlist(x$z)))
+    add <- data.frame(x = temp[,1], y = temp[,2], z = temp2[,1])
 }
 
 ##----------------------------------------------------------------------
@@ -159,25 +162,32 @@ levc[1] <- ""
 
 # levelplot
 ## pdf("mapa_tam_amostral_quarter.pdf", w=12, h=10)
-levelplot(x ~ Lon3 + Lat3,
-          data = mapa.latt.q, prof = prof, mm = mm, aspect = "iso",
-          as.table = TRUE, xlim = xlim, ylim = ylim,
-          xlab = expression(paste("Longitude ", "(", degree, ")")),
-          ylab = expression(paste("Latitude ", "(", degree, ")")),
-          between = list(x = c(1,1), y = c(1,1)), pretty = TRUE,
-          scales = list(x = list(at = labsx, labels = labsxc),
-          y = list(at = labsy, labels = labsyc)),
-          strip = strip.custom(bg = "lightgrey"),
-          at = lev, col.regions = rev(grey.colors(length(lev)-1)),
-          colorkey = list(space="right", labels=list(at=lev, labels=levc)),
-          panel = function(x, mm, prof, ...){
-              panel.levelplot(x, ...)
-              panel.grid(h = -length(labsx), v = -length(labsy), ...)
-              lapply(prof, llines, col = "blue")
-              sapply(prof, function(x) ltext(unique(x$x), unique(x$y),
-                                             labels = unique(x$level)))
-              panel.polygon(mm$x, mm$y, border = "black", col = "snow")
+p <- levelplot(x ~ Lon3 + Lat3, data = mapa.latt.q,
+               mm = mm, aspect = "iso",
+               as.table = TRUE, xlim = xlim, ylim = ylim,
+               xlab = expression(paste("Longitude ", "(", degree, ")")),
+               ylab = expression(paste("Latitude ", "(", degree, ")")),
+               between = list(x = c(1,1), y = c(1,1)), pretty = TRUE,
+               scales = list(x = list(at = labsx, labels = labsxc),
+                   y = list(at = labsy, labels = labsyc)),
+               strip = strip.custom(bg = "lightgrey"),
+               at = lev, col.regions = rev(grey.colors(length(lev)-1)),
+               colorkey = list(space="right", labels=list(at=lev, labels=levc)),
+               panel = function(x, mm, prof, temp, ...){
+                   panel.levelplot(x, ...)
+                   panel.grid(h = -length(labsx), v = -length(labsy), ...)
+                   panel.polygon(mm$x, mm$y, border = "black", col = "snow")
           })
+
+p + layer(panel.contourplot(x = temp$x, y = temp$y, z = temp$z,
+                            at = seq(0, -8000, -500),
+                            col = "gray10", lty = "dashed",
+                            contour = TRUE, subscripts = TRUE,
+                            xlim = xlim, ylim = ylim, region =
+                            FALSE, labels = list(labels = TRUE, col =
+                            "gray10", cex = 0.5), label.style =
+                            "flat"), data = temp)
+
 # dev.off()
 
 ##---------------------------------------------------------------------
