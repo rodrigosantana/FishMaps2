@@ -3,6 +3,45 @@
 ## experimental and is used for tests and examples.
 ##======================================================================
 
+require(grid)
+require(lattice)
+require(latticeExtra)
+require(maps)
+require(mapdata)
+require(marelac)
+data(Bathymetry)
+
+dados <- read.csv("../data/mapa.latt.q.csv")
+
+## Carrega a funcao
+source("levelmap.R")
+## Teste sem 0 e NAs
+levelmap(x ~ Lon3 + Lat3 | factor(Quarter), data = dados, xlim = c(-60, 20),
+         ylim = c(-50, 5), breaks = pretty(dados$x),
+         jump = 5, bathymetry = TRUE,
+         bathymetry.seq = seq(-1000, -8000, -1000))
+
+## Insere 0
+set.seed(123)
+samp.0 <- sample(1:nrow(dados), size = 5)
+dados$x[samp.0] <- 0
+## Teste COM 0
+levelmap(x ~ Lon3 + Lat3 | factor(Quarter), data = dados, xlim = c(-60, 20),
+         ylim = c(-50, 5), breaks = pretty(dados$x),
+         jump = 5, bathymetry = TRUE,
+         bathymetry.seq = seq(-1000, -8000, -1000))
+
+## Insere NAs
+set.seed(321)
+samp.NA <- sample(1:nrow(dados), size = 5)
+dados$x[samp.NA] <- NA
+## Teste COM 0 E NAs
+levelmap(x ~ Lon3 + Lat3 | factor(Quarter), data = dados, xlim = c(-60, 20),
+         ylim = c(-50, 5), breaks = pretty(dados$x),
+         jump = 5, bathymetry = TRUE,
+         bathymetry.seq = seq(-1000, -8000, -1000))
+
+stop
 ##----------------------------------------------------------------------
 ## Datasets for examples
 ##----------------------------------------------------------------------
@@ -98,7 +137,10 @@ isobath <- function(x, ...){
     temp <- expand.grid(x$x, x$y)
     temp2 <- data.frame(matrix(unlist(x$z)))
     add <- data.frame(x = temp[,1], y = temp[,2], z = temp2[,1])
+    return(add)
 }
+
+add <- isobath(Bathymetry)
 
 ##----------------------------------------------------------------------
 
