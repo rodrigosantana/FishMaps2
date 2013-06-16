@@ -2,7 +2,7 @@ levelmap <- function(x, data, xlim, ylim, breaks, jump,
                      key.space = "right",
                      database = "world",
                      bathymetry = FALSE,
-                     bathymetry.seq = seq(0, -8000, -1000), ...){
+                     bathymetry.seq = NULL, ...){
     ## Base de dados para os mapas
     mm <- map(database = database, plot = FALSE, fill = TRUE)
     ## Define os ranges do mapa, e os labels para colocar nos graficos
@@ -35,7 +35,7 @@ levelmap <- function(x, data, xlim, ylim, breaks, jump,
     isobath <- function(iso){
         temp <- expand.grid(iso$x, iso$y)
         temp2 <- data.frame(matrix(unlist(iso$z)))
-        res <- data.frame(x = temp[,1], y = temp[,2], z = temp2[,1])
+        res <- data.frame(lat = temp[,1], lon = temp[,2], prof = temp2[,1])
         return(res)
     }
     ## levelmap com levelplot
@@ -63,7 +63,7 @@ levelmap <- function(x, data, xlim, ylim, breaks, jump,
                            panel.zero.points(x, y, z, ...)
                        })
         p <- p + layer(
-            panel.contourplot(x = x, y = y, z = z,
+            panel.contourplot(x = lat, y = lon, z = prof,
                               at = bathymetry.seq,
                               col = "gray10", lty = "dashed",
                               contour = TRUE, subscripts = TRUE,
@@ -72,7 +72,6 @@ levelmap <- function(x, data, xlim, ylim, breaks, jump,
                               labels = list(labels = TRUE,
                                   col = "gray10", cex = 0.5),
                               label.style = "flat"),
-            panel.zero.points(x, y, z, ...),
             data = add)
     } else{
         p <- levelplot(x, data, ..., mm = mm, aspect = "iso",
