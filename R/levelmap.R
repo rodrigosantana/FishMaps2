@@ -1,73 +1,57 @@
-levelmap <- function(x, data, xlim, ylim, lev, jump,
+levelmap <- function(x, data, xlim, ylim, breaks, jump,
                      key.space = "right",
                      database = "world",
-                     bathymetry = FALSE, ...){
+                     bathymetry = FALSE,
+                     bathymetry.seq = seq(0, -8000, -1000), ...){
     ## Base de dados para os mapas
-    mm <- maps::map(database = database, plot = FALSE, fill = TRUE)
+    mm <- map(database = database, plot = FALSE, fill = TRUE)
     ## Define os ranges do mapa, e os labels para colocar nos graficos
+    ## Isso precisa melhorar e ficar mais generico
     labsx <- seq(min(xlim), max(xlim), jump)
     labsxc <- as.character(labsx)
     labsxc[seq(2, length(labsxc), 2)] <- ""
     labsy <- seq(min(ylim), max(ylim), jump)
     labsyc <- as.character(labsy)
     labsyc[seq(2, length(labsyc), 2)] <- ""
-    ## Define as classes
-    ## obj <- paste(all.vars(match.call())[4], all.vars(x)[1], sep = "$")
-    ## lev <- pretty(eval(obj), n)
-    ## Função para plotar valores zero
+    ## Função para plotar valores zero e NA
     panel.zero.points <- function(x, y, z, subscripts, ...){
-        require("grid", quietly = TRUE)
         x <- as.numeric(x)[subscripts]
         y <- as.numeric(y)[subscripts]
         z <- as.numeric(z)[subscripts]
-        for(i in seq(along = z)){
+        for(i in seq_along(z)){
             if(z[i] == 0L){
-                grid.points(x = x[i], y = y[i], pch = 3,
+                grid.points(x = x[i], y = y[i], pch = "+",
+                            size = unit(1, "native"))
+            } else if(is.na(z[i])){
+                grid.points(x = x[i], y = y[i], pch = "-",
                             size = unit(1, "native"))
             } else{
                 grid.points(x = x[i], y = y[i], pch = "")
             }
         }
     }
-    ## Função para plotar NA's
-    panel.na.points <- function(x, y, z, subscripts, ...){
-        require("grid", quietly = TRUE)
-        x <- as.numeric(x)[subscripts]
-        y <- as.numeric(y)[subscripts]
-        z <- as.numeric(z)[subscripts]
-        for(i in seq(along = z)){
-            if(is.na(z[i])) {
-                grid.points(x = x[i], y = y[i], pch = "-")
-            } else if(z[i] == 0L) {
-                grid.points(x = x[i], y = y[i], pch = "+")
-            } else {
-                grid.points(x = x[i], y = y[i], pch = "")
-            }
-        }
-    }
     ## Função para converter a base de dados batimétricos.
-    isobath <- function(x, ...){
-        temp <- expand.grid(x$x, x$y)
-        temp2 <- data.frame(matrix(unlist(x$z)))
-        add <- data.frame(x = temp[,1], y = temp[,2], z = temp2[,1])
+    # mudei alguns nomes pra nao confundir com os que ja tinham
+    isobath <- function(iso){
+        temp <- expand.grid(iso$x, iso$y)
+        temp2 <- data.frame(matrix(unlist(iso$z)))
+        res <- data.frame(x = temp[,1], y = temp[,2], z = temp2[,1])
+        return(res)
     }
     ## levelmap com levelplot
-    ## Base de dados de batimetrias - lembrando que é requisito do
-    ## FishMaps2 o pacote marelac!!
-    if(bathymetry == TRUE) {
+    if(bathymetry){
         data(Bathymetry)
-        # OBSERVACÃO: tem que rodar o add na mão, dentro da função não
-        # esta workando. Não sei pq!! Roda a function isobath antes!
+        ## converte as batimetrias em data.frame
         add <- isobath(Bathymetry)
-        p <- levelplot(x, data, ..., mm = mm, aspect = "iso",
-                       as.table = TRUE, xlim = xlim, ylim = ylim,
+        p <- levelplot(x, data, ..., mm = mm, bathymetry.seq = bathymetry.seq,
+                       aspect = "iso", as.table = TRUE, xlim = xlim, ylim = ylim,
                        xlab = expression(paste("Longitude ", "(", degree, ")")),
                        ylab = expression(paste("Latitude ", "(", degree, ")")),
                        scales = list(x = list(at = labsx, labels = labsxc),
                            y = list(at = labsy, labels = labsyc)),
                        strip = strip.custom(bg = "lightgrey"),
-                       at = lev, colorkey = list(space = key.space),
-                       col.regions = grey.colors(length(lev)-1,
+                       at = breaks, colorkey = list(space = key.space),
+                       col.regions = grey.colors(length(breaks)-1,
                            start = 0.7, end = 0.1),
                        par.settings = list(layout.heights =
                            list(top.padding = 0, bottom.padding = 0)),
@@ -76,18 +60,21 @@ levelmap <- function(x, data, xlim, ylim, lev, jump,
                            panel.grid(h = -length(labsx), v = -length(labsy), ...)
                            panel.polygon(mm$x, mm$y, border = "black",
                                          col = "snow")
-                           panel.na.points(x, y, z, ...)
+                           panel.zero.points(x, y, z, ...)
                        })
         p <- p + layer(
-            panel.contourplot(x = add$x, y = add$y, z = add$z,
-                              at = seq(0, -8000, -1000),
+            panel.contourplot(x = x, y = y, z = z,
+                              at = bathymetry.seq,
                               col = "gray10", lty = "dashed",
                               contour = TRUE, subscripts = TRUE,
-                              xlim = xlim, ylim = ylim, region =
-                              FALSE, labels = list(labels = TRUE, col =
-                                         "gray10", cex = 0.5), label.style =
-                              "flat"), data = add)
-    } else {
+                              xlim = xlim, ylim = ylim,
+                              region = FALSE,
+                              labels = list(labels = TRUE,
+                                  col = "gray10", cex = 0.5),
+                              label.style = "flat"),
+            panel.zero.points(x, y, z, ...),
+            data = add)
+    } else{
         p <- levelplot(x, data, ..., mm = mm, aspect = "iso",
                        as.table = TRUE, xlim = xlim, ylim = ylim,
                        xlab = expression(paste("Longitude ", "(", degree, ")")),
@@ -95,8 +82,8 @@ levelmap <- function(x, data, xlim, ylim, lev, jump,
                        scales = list(x = list(at = labsx, labels = labsxc),
                            y = list(at = labsy, labels = labsyc)),
                        strip = strip.custom(bg = "lightgrey"),
-                       at = lev, colorkey = list(space = key.space),
-                       col.regions = grey.colors(length(lev)-1,
+                       at = breaks, colorkey = list(space = key.space),
+                       col.regions = grey.colors(length(breaks)-1,
                            start = 0.7, end = 0.1),
                        par.settings = list(layout.heights = list(top.padding = 0,
                                                bottom.padding = 0)),
@@ -105,7 +92,7 @@ levelmap <- function(x, data, xlim, ylim, lev, jump,
                            panel.grid(h = -length(labsx), v = -length(labsy), ...)
                            panel.polygon(mm$x, mm$y, border = "black", col =
                                          "snow")
-                           panel.na.points(x, y, z, ...)
+                           panel.zero.points(x, y, z, ...)
                        })
     }
     print(p)
