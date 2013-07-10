@@ -20,13 +20,13 @@ levelmap <- function(x, data, xlim, ylim, breaks, jump,
         z <- as.numeric(z)[subscripts]
         for(i in seq_along(z)){
             if(z[i] == 0L){
-                grid.points(x = x[i], y = y[i], pch = "+",
+                grid::grid.points(x = x[i], y = y[i], pch = "+",
                             size = unit(1, "native"))
             } else if(is.na(z[i])){
-                grid.points(x = x[i], y = y[i], pch = "-",
+                grid::grid.points(x = x[i], y = y[i], pch = "-",
                             size = unit(1, "native"))
             } else{
-                grid.points(x = x[i], y = y[i], pch = "")
+                grid::grid.points(x = x[i], y = y[i], pch = "")
             }
         }
     }
