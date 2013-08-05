@@ -3,6 +3,15 @@ levelmap <- function(x, data, xlim, ylim, breaks, jump,
                      database = "world",
                      bathymetry = FALSE,
                      bathymetry.seq = NULL, ...){
+    ## Pacotes necessarios: isso deve ser removido daqui antes de virar
+    ## pacote. Esses pacotes devem ser dependencias e serao carregados
+    ## automaticamente quando o FishMaps2 for carregado
+    require(grid)
+    require(lattice)
+    require(latticeExtra)
+    require(maps)
+    require(mapdata)
+    require(marelac)
     ## Base de dados para os mapas
     mm <- map(database = database, plot = FALSE, fill = TRUE)
     ## Define os ranges do mapa, e os labels para colocar nos graficos
@@ -20,13 +29,13 @@ levelmap <- function(x, data, xlim, ylim, breaks, jump,
         z <- as.numeric(z)[subscripts]
         for(i in seq_along(z)){
             if(z[i] == 0L){
-                grid::grid.points(x = x[i], y = y[i], pch = "+",
+                grid.points(x = x[i], y = y[i], pch = "+",
                             size = unit(1, "native"))
             } else if(is.na(z[i])){
-                grid::grid.points(x = x[i], y = y[i], pch = "-",
+                grid.points(x = x[i], y = y[i], pch = "-",
                             size = unit(1, "native"))
             } else{
-                grid::grid.points(x = x[i], y = y[i], pch = "")
+                grid.points(x = x[i], y = y[i], pch = "")
             }
         }
     }
