@@ -1,7 +1,7 @@
 ## Loading function
 source("levelmap_ggplot.R")
 ## Loading data
-dados <- read.table("mapa.bum.csv", sep = ",", dec = ".", header = TRUE)
+dados <- read.table("../data/mapa.bum.csv", sep = ",", dec = ".", header = TRUE)
 ## Exclude trash column from data
 dados <- dados[,2:5]
 ## Plot map facet by Quarter without isobaths
