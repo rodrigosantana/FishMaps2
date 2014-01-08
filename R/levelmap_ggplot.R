@@ -3,7 +3,6 @@ levelmap_ggplot <- function(x, y, fill, facetplot, dat, basemap, xlim, ylim, col
   require(maps)
   require(mapdata)
   require(ggplot2)
-  require(reshape)
   require(marelac)
   if(is.null(facetplot)) {
     if(bathymetry) {
