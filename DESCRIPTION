@@ -4,8 +4,7 @@ Version: 0.0-1
 Authors@R: c(
     person("Fernando", "Mayer", email = "fernandomayer@gmail.com", role = c("aut", "cre")),
     person("Rodrigo", "Sant'Ana", email = "ocrodrigosantana@gmail.com", role = c("aut", "cre")))
-Description: Proportional symbol mapping for fishery data in batch mode
-(ggplot2 version)
+Description: Proportional symbol mapping for fishery data in batch mode (ggplot2 version)
 Depends: R (>= 3.2.0)
 Imports:
     ggplot2,
