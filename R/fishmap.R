@@ -1,5 +1,28 @@
-levelmap_ggplot <- function(x, y, fill, facetplot, dat, basemap, xlim, ylim, col.grd, 
-                     bathymetry, ...){
+#' @title Plots fishery data into maps
+#' @name fishmap
+#'
+#' @description Plots georeferenced fishery data (catch, effort, CPUE,
+#' ...) into maps. This description needs to be expanded.
+#'
+#' @param x A vector of coordinates (longitude)
+#' @param y A vector of coordinates (latitude)
+#' @param fill A numeric vector with data to fill in the map
+#' @param facetplot wtf
+#' @param dat The data frame containing the data
+#' @param basemap The map datbase (from package \code{mapdata})
+#' @param xlim,ylim X (longitude) and Y (latitude) limits of the map
+#' @param col.grd The color of the grid
+#' @param bathymetry A logical indicating if bathymetry lines should be
+#' included
+#' @param ... Other arguments passed to \code{map}
+#'
+#' @return A map with data
+#'
+#' @examples
+#' 1 + 1
+#' @export
+fishmap <- function(x, y, fill, facetplot, dat, basemap, xlim, ylim, col.grd,
+                    bathymetry, ...){
   require(maps)
   require(mapdata)
   require(ggplot2)
@@ -35,8 +58,8 @@ levelmap_ggplot <- function(x, y, fill, facetplot, dat, basemap, xlim, ylim, col
           coord_fixed(xlim = xlim, ylim = ylim) +
           xlab(expression(paste("Longitude ", "(", degree, ")"))) +
           ylab(expression(paste("Latitude ", "(", degree, ")")))
-      } 
-  } else { 
+      }
+  } else {
     if(bathymetry) {
       ## Função para converter a base de dados batimétricos.
       # mudei alguns nomes pra nao confundir com os que ja tinham
