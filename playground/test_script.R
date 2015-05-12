@@ -1,23 +1,26 @@
+##----------------------------------------------------------------------
+## Convertendo os arquivos csv em rda para poder colocar no pacote
+
 ## Loading function
-source("levelmap_ggplot.R")
+source("../R/fishmap.R")
 ## Loading data
 dados <- read.table("../data/mapa.bum.csv", sep = ",", dec = ".", header = TRUE)
 ## Exclude trash column from data
 dados <- dados[,2:5]
 ## Plot map facet by Quarter without isobaths
-levelmap_ggplot(dat = dados, x = 'Lon3', y = 'Lat3', fill = 'x', facet = '~Quarter',
+fishmap(dat = dados, x = 'Lon3', y = 'Lat3', fill = 'x', facet = '~Quarter',
          basemap = 'world', xlim = c(-120,120), ylim = c(50, -90),
          col.grd = c('gray', 'red'), bathymetry = FALSE)
 ## Plot map without segregation and isobaths
-levelmap_ggplot(dat = dados, x = 'Lon3', y = 'Lat3', fill = 'x', facet = NULL,
+fishmap(dat = dados, x = 'Lon3', y = 'Lat3', fill = 'x', facet = NULL,
          basemap = 'world', xlim = c(-120,120), ylim = c(50, -90),
          col.grd = c('gray', 'red'), bathymetry = FALSE)
 ## Plot map segregated by Quarter with isobaths
-levelmap_ggplot(dat = dados, x = 'Lon3', y = 'Lat3', fill = 'x', facet = '~Quarter',
+fishmap(dat = dados, x = 'Lon3', y = 'Lat3', fill = 'x', facet = '~Quarter',
          basemap = 'world', xlim = c(-120,120), ylim = c(50, -90),
          col.grd = c('gray', 'red'), bathymetry = TRUE)
 ## Plot map without segregation and with isobaths
-levelmap_ggplot(dat = dados, x = 'Lon3', y = 'Lat3', fill = 'x', facet = NULL,
+fishmap(dat = dados, x = 'Lon3', y = 'Lat3', fill = 'x', facet = NULL,
          basemap = 'world', xlim = c(-120,120), ylim = c(50, -90),
          col.grd = c('gray', 'red'), bathymetry = TRUE)
 
@@ -33,7 +36,7 @@ levelmap(x ~ Lon3 + Lat3 | factor(Quarter), data = dados2, xlim = c(-60, 20),
          jump = 5, bathymetry = TRUE,
          bathymetry.seq = seq(-1000, -8000, -1000))
 dev.new()
-levelmap_ggplot(dat = dados2, x = 'Lon3', y = 'Lat3', fill = 'x',
+fishmap(dat = dados2, x = 'Lon3', y = 'Lat3', fill = 'x',
                 facet = "~Quarter", basemap = 'world',
                 xlim = c(-60,20), ylim = c(-50, 5),
                 col.grd = c('gray', 'black'), bathymetry = TRUE)
@@ -66,7 +69,7 @@ levelmap(x ~ Lon3 + Lat3 | factor(Quarter), data = dados2, xlim = c(-60, 20),
          jump = 5, bathymetry = TRUE,
          bathymetry.seq = seq(-1000, -8000, -1000))
 dev.set(3)
-levelmap_ggplot(dat = dados2, x = 'Lon3', y = 'Lat3', fill = 'x',
+fishmap(dat = dados2, x = 'Lon3', y = 'Lat3', fill = 'x',
                 facet = "~Quarter", basemap = 'world',
                 xlim = c(-60,20), ylim = c(-50, 5),
                 col.grd = c('gray', 'black'), bathymetry = TRUE)
@@ -91,7 +94,7 @@ levelmap(x ~ Lon3 + Lat3 | factor(Quarter), data = dados2, xlim = c(-60, 20),
          jump = 5, bathymetry = TRUE,
          bathymetry.seq = seq(-1000, -8000, -1000))
 dev.set(3)
-levelmap_ggplot(dat = dados2, x = 'Lon3', y = 'Lat3', fill = 'x',
+fishmap(dat = dados2, x = 'Lon3', y = 'Lat3', fill = 'x',
                 facet = "~Quarter", basemap = 'world',
                 xlim = c(-60,20), ylim = c(-50, 5),
                 col.grd = c('gray', 'black'), bathymetry = TRUE)
