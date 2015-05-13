@@ -20,13 +20,15 @@
 #'
 #' @examples
 #' 1 + 1
+#'
+#' @import ggplot2
 #' @export
 fishmap <- function(x, y, fill, facetplot, dat, basemap, xlim, ylim, col.grd,
                     bathymetry, ...){
-  require(maps)
-  require(mapdata)
-  require(ggplot2)
-  require(marelac)
+  ## require(maps)
+  ## require(mapdata)
+  ## require(ggplot2)
+  ## require(marelac)
   if(is.null(facetplot)) {
     if(bathymetry) {
         ## Função para converter a base de dados batimétricos.
@@ -38,7 +40,7 @@ fishmap <- function(x, y, fill, facetplot, dat, basemap, xlim, ylim, col.grd,
           res <- subset(res, subset = prof <= 0)
           return(res)
         }
-        data(Bathymetry)
+        data(Bathymetry, envir = environment())
         add <- isobath(Bathymetry)
         mm <- map_data(basemap)
         ggplot(dat, aes_string(x = x, y = y)) +
@@ -70,7 +72,7 @@ fishmap <- function(x, y, fill, facetplot, dat, basemap, xlim, ylim, col.grd,
         res <- subset(res, subset = prof <= 0)
         return(res)
       }
-      data(Bathymetry)
+      data(Bathymetry, envir = environment())
       add <- isobath(Bathymetry)
       mm <- map_data(basemap)
       ggplot(dat, aes_string(x = x, y = y)) +
