@@ -12,7 +12,12 @@
 - Arrumar mais exemplos com dados (que podem ser fictícios) em outros
   oceanos e outras costas
 - Separar esses arquivos de exemplos
-- Escrever a documentação
-- Compilar o pacote
+- Escrever a documentação -> etapa iniciada no branch roxygen
+- Compilar o pacote -> usando devtool
 - Testar no Travis CI (como no
   [FishMaps](https://github.com/fernandomayer/FishMaps))
+- Melhorar os imports das funcoes que estamos usando dentro da funcao
+	principal
+- Revisar o uso de data() dentro da funcao: uma forma melhor seria
+	importar essa base e salvar como um arquivo rda
+- Revisar os NOTEs do devtools::check()
