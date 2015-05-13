@@ -2,6 +2,7 @@ README.md
 TODO.md
 .gitignore
 .Rprofile
+^\.travis\.yml$
 ^\.git$
 ^playground$
 
