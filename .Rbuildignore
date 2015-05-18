@@ -5,4 +5,5 @@ TODO.md
 ^\.travis\.yml$
 ^\.git$
 ^playground$
+^data-raw$
 
