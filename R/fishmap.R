@@ -25,10 +25,10 @@
 #' @export
 fishmap <- function(x, y, fill, facetplot, dat, basemap, xlim, ylim, col.grd,
                     bathymetry, ...){
-  ## require(maps)
-  ## require(mapdata)
-  ## require(ggplot2)
-  ## require(marelac)
+  require(maps)
+  require(mapdata)
+  require(ggplot2)
+  require(marelac)
   if(is.null(facetplot)) {
     if(bathymetry) {
         ## Função para converter a base de dados batimétricos.
