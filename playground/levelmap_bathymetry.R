@@ -1,3 +1,30 @@
+##' @title Plots fishery data into maps
+##' @name levelmap
+##'
+##' @description Plots georeferenced fishery data into maps. This
+##' desciption must be expanded.
+##'
+##' @param x
+##' @param data
+##' @param xlim
+##' @param ylim
+##' @param breaks
+##' @param jump
+##' @param key.space
+##' @param database
+##' @param bathymetry
+##' @param bathymetry.seq
+##' @param ...
+##'
+##' @return A map with data
+##'
+##' @author Fernando Mayer
+##'
+##' @import lattice
+##' @import latticeExtra
+##' @import marelac
+##'
+##' @export
 levelmap <- function(x, data, xlim, ylim, breaks, jump,
                      key.space = "right",
                      database = "world",
@@ -6,14 +33,16 @@ levelmap <- function(x, data, xlim, ylim, breaks, jump,
     ## Pacotes necessarios: isso deve ser removido daqui antes de virar
     ## pacote. Esses pacotes devem ser dependencias e serao carregados
     ## automaticamente quando o FishMaps2 for carregado
-    require(grid)
-    require(lattice)
-    require(latticeExtra)
-    require(maps)
-    require(mapdata)
-    require(marelac)
+    ## require(grid)
+    ## require(lattice)
+    ## require(latticeExtra)
+    ## require(maps)
+    ## require(mapdata)
+    ## require(marelac)
     ## Base de dados para os mapas
-    mm <- map(database = database, plot = FALSE, fill = TRUE)
+    load("R/sysdata.rda")
+    #data(worldHiresMapEnv)
+    mm <- match.arg(database)
     ## Define os ranges do mapa, e os labels para colocar nos graficos
     ## Isso precisa melhorar e ficar mais generico
     labsx <- seq(min(xlim), max(xlim), jump)
@@ -98,7 +127,7 @@ levelmap <- function(x, data, xlim, ylim, breaks, jump,
                        panel = function(x, y, z, mm, ...){
                            panel.levelplot(x, y, z, ...)
                            panel.grid(h = -length(labsx), v = -length(labsy), ...)
-                           panel.polygon(mm$x, mm$y, border = "black", col =
+                           panel.polygon(mm$lon, mm$lat, border = "black", col =
                                          "snow")
                            panel.zero.points(x, y, z, ...)
                        })

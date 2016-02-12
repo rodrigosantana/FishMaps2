@@ -5,9 +5,10 @@ Authors@R: c(
     person("Fernando", "Mayer", email = "fernandomayer@gmail.com", role = c("aut", "cre")),
     person("Rodrigo", "Sant'Ana", email = "ocrodrigosantana@gmail.com", role = "aut"))
 Description: Proportional symbol mapping for fishery data in batch mode
-	     (ggplot2 version). This package plots and arrange multiple
-	     fisheries maps in a grid.
-Depends: R (>= 3.2.0)
+    (ggplot2 version). This package plots and arrange multiple
+    fisheries maps in a grid.
+Depends:
+    R (>= 3.2.0)
 Imports:
     ggplot2,
     mapdata,
@@ -15,3 +16,4 @@ Imports:
     marelac
 License: GPL-3
 LazyData: true
+RoxygenNote: 5.0.1

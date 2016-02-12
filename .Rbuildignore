@@ -6,4 +6,4 @@ TODO.md
 ^\.git$
 ^playground$
 ^data-raw$
-
+^\.#*

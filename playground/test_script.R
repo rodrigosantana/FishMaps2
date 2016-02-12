@@ -1,100 +1,147 @@
-## Loading function
-source("../R/fishmap.R")
-## Loading data
-dados <- read.table("../data/mapa.bum.csv", sep = ",", dec = ".", header = TRUE)
-## Exclude trash column from data
-dados <- dados[,2:5]
-## Plot map facet by Quarter without isobaths
-fishmap(dat = dados, x = 'Lon3', y = 'Lat3', fill = 'x', facet = '~Quarter',
-         basemap = 'world', xlim = c(-120,120), ylim = c(50, -90),
-         col.grd = c('gray', 'red'), bathymetry = FALSE)
-## Plot map without segregation and isobaths
-fishmap(dat = dados, x = 'Lon3', y = 'Lat3', fill = 'x', facet = NULL,
-         basemap = 'world', xlim = c(-120,120), ylim = c(50, -90),
-         col.grd = c('gray', 'red'), bathymetry = FALSE)
-## Plot map segregated by Quarter with isobaths
-fishmap(dat = dados, x = 'Lon3', y = 'Lat3', fill = 'x', facet = '~Quarter',
-         basemap = 'world', xlim = c(-120,120), ylim = c(50, -90),
-         col.grd = c('gray', 'red'), bathymetry = TRUE)
-## Plot map without segregation and with isobaths
-fishmap(dat = dados, x = 'Lon3', y = 'Lat3', fill = 'x', facet = NULL,
-         basemap = 'world', xlim = c(-120,120), ylim = c(50, -90),
-         col.grd = c('gray', 'red'), bathymetry = TRUE)
+##======================================================================
+## This is the main development file for FishMaps. Everything here is
+## experimental and is used for tests and examples.
+##======================================================================
 
-########################################################################
+## Para carregar as funcoes (simula o pacote instalado e carregado)
+devtools::load_all()
+## Para atualizar a documentacao
+devtools::document()
+## Para conferir a documantacao
+devtools::check_man()
+## Para conferir o pacote completo
+devtools::check(cleanup = FALSE, check_dir = "../")
 
-dados2 <- read.csv("../data/mapa.latt.q.csv")
+## testando a funcao levelmap
+args(levelmap)
 
-## Carrega a funcao
-source("levelmap.R")
-## Teste sem 0 e NAs
-levelmap(x ~ Lon3 + Lat3 | factor(Quarter), data = dados2, xlim = c(-60, 20),
-         ylim = c(-50, 5), breaks = pretty(dados2$x),
-         jump = 5, bathymetry = TRUE,
-         bathymetry.seq = seq(-1000, -8000, -1000))
-dev.new()
-fishmap(dat = dados2, x = 'Lon3', y = 'Lat3', fill = 'x',
-                facet = "~Quarter", basemap = 'world',
-                xlim = c(-60,20), ylim = c(-50, 5),
-                col.grd = c('gray', 'black'), bathymetry = TRUE)
-## O que teria que fazer
-# 1. argumento para especificar o intervalo de apresentacao das lat/lon
-# (parecido com o jump)
-# 2. alternar a posicao das escalas do xlim e ylim como no lattice (ali
-# por exemplo tem numeros sobrepostos na longitude)
-# 3. tirar o fundo cinza do oceano porque pode confundir com a escala de
-# cinza dos valores plotados
-# 4. colocar as divisoes de paises/mudar a cor do continente para uma
-# mais clara (ou colocar como argumento)
-# 5. melhorar a apresentacao da escala (parece muito pequena, poderia
-# aumentar e aproveitar mais o tamanho do mapa, além de colocar mais
-# valores)
-# 6. opcoes de batimetria (como o bathymetry.seq) e cor das isobatas
-# 7. o argumento facet podia ser passado sem o til (formato de formula),
-# deixando soh "Quarter" (o que aconteceria se tivesse mais um
-# condicional, tipo Year? --- TESTAR)
+##----------------------------------------------------------------------
+## Bait Boat
+##----------------------------------------------------------------------
 
-dev.set(2)
+## BB YEAR
+levelmap(cpue ~ lon + lat | year, data = BB.data.y,
+         xlim = c(-60, -40), ylim = c(-35, -20),
+         key.space = "right", database = "world",
+         breaks = pretty(BB.data.y$cpue), square = 1,
+         col.land = "darkgrey")
 
-## Insere 0
-set.seed(123)
-samp.0 <- sample(1:nrow(dados2), size = 5)
-dados2$x[samp.0] <- 0
-## Teste COM 0
-levelmap(x ~ Lon3 + Lat3 | factor(Quarter), data = dados2, xlim = c(-60, 20),
-         ylim = c(-50, 5), breaks = pretty(dados2$x),
-         jump = 5, bathymetry = TRUE,
-         bathymetry.seq = seq(-1000, -8000, -1000))
-dev.set(3)
-fishmap(dat = dados2, x = 'Lon3', y = 'Lat3', fill = 'x',
-                facet = "~Quarter", basemap = 'world',
-                xlim = c(-60,20), ylim = c(-50, 5),
-                col.grd = c('gray', 'black'), bathymetry = TRUE)
-# 8. inserir o simbolo para o zero
-# - no FishMaps2 no lattice ele insere o simbolo, mas ainda junto com um
-# quadrado cinza (eh um dos bugs que precisa corrigir na funcao
-# panel.zero.points)
-# 9. separar o zero na escala --- isso vale para os dois
-# - talvez colocar um argumento zero.sep para ver se o usuario realmente
-# quer separar o zero
-# - talvez colocar um argumento pch.zero para escolher o simbolo do zero
+## BB YEAR with ZERO
+str(BB.data.y)
+set.seed(1982)
+idx <- sample(nrow(BB.data.y), size = 8)
+bait.boat.y0 <- BB.data.y
+bait.boat.y0$cpue[idx] <- 0
+levelmap(cpue ~ lon + lat | year, data = bait.boat.y0,
+         xlim = c(-60, -40), ylim = c(-35, -20),
+         key.space = "right", database = "world",
+         breaks = pretty(bait.boat.y0$cpue), square = 1)
 
-dev.set(2)
+## BB YEAR with ZERO and NA
+bait.boat.y0na <- bait.boat.y0
+## -25.5/-45.5 (2001)
+bait.boat.y0na$cpue[9] <- NA
+## -23.5/-41.5 (2002)
+bait.boat.y0na$cpue[28] <- NA
+levelmap(cpue ~ lon + lat | year, data = bait.boat.y0na,
+         xlim = c(-60, -40), ylim = c(-35, -20),
+         key.space = "right", database = "world",
+         breaks = pretty(bait.boat.y0na$cpue), square = 1)
 
-## Insere NAs
-set.seed(321)
-samp.NA <- sample(1:nrow(dados2), size = 5)
-dados2$x[samp.NA] <- NA
-## Teste COM 0 E NAs
-levelmap(x ~ Lon3 + Lat3 | factor(Quarter), data = dados2, xlim = c(-60, 20),
-         ylim = c(-50, 5), breaks = pretty(dados2$x),
-         jump = 5, bathymetry = TRUE,
-         bathymetry.seq = seq(-1000, -8000, -1000))
-dev.set(3)
-fishmap(dat = dados2, x = 'Lon3', y = 'Lat3', fill = 'x',
-                facet = "~Quarter", basemap = 'world',
-                xlim = c(-60,20), ylim = c(-50, 5),
-                col.grd = c('gray', 'black'), bathymetry = TRUE)
-# 10. deixar as posicoes como NA em branco
-# - na versao lattice ele deixa, mas da aquele erro de packet (tambem um
-# bug na funcao panel.zero.points)
+## BB YEAR-QUARTER
+levelmap(cpue ~ lon + lat | year + quarter, data = BB.data.yq,
+         xlim = c(-60, -40), ylim = c(-35, -20),
+         key.space = "right", database = "world",
+         breaks = pretty(BB.data.yq$cpue), square = 1)
+
+## BB YEAR-QUARTER with ZERO
+str(BB.data.yq)
+set.seed(1982)
+idx <- sample(nrow(BB.data.yq), size = 18)
+bait.boat.yq0 <- BB.data.yq
+bait.boat.yq0$cpue[idx] <- 0
+levelmap(cpue ~ lon + lat | year + quarter, data = bait.boat.yq0,
+         xlim = c(-60, -40), ylim = c(-35, -20),
+         key.space = "right", database = "world",
+         breaks = pretty(bait.boat.yq0$cpue), square = 1)
+
+## BB YEAR-QUARTER with ZERO and NA
+bait.boat.yq0na <- bait.boat.yq0
+## -32.5/-50.5 (2001/2)
+bait.boat.yq0na$cpue[34] <- NA
+## -23.5/-41.5 (2002/1)
+bait.boat.yq0na$cpue[61] <- NA
+levelmap(cpue ~ lon + lat | year + quarter, data = bait.boat.yq0na,
+         xlim = c(-60, -40), ylim = c(-35, -20),
+         key.space = "right", database = "world",
+         breaks = pretty(bait.boat.yq0na$cpue), square = 1)
+##----------------------------------------------------------------------
+
+##----------------------------------------------------------------------
+## Long Line
+##----------------------------------------------------------------------
+
+## LL YEAR
+levelmap(cpue ~ lon + lat | year, data = LL.data.y,
+         xlim = c(-60, -20), ylim = c(-50, -10),
+         key.space = "right", database = "world",
+         breaks = pretty(LL.data.y$cpue), square = 5)
+
+## LL YEAR with ZERO
+str(LL.data.y)
+set.seed(1982)
+idx <- sample(nrow(LL.data.y), size = 8)
+long.line.y0 <- LL.data.y
+long.line.y0$cpue[idx] <- 0
+levelmap(cpue ~ lon + lat | year, data = long.line.y0,
+         xlim = c(-60, -20), ylim = c(-50, -10),
+         key.space = "right", database = "world",
+         breaks = pretty(long.line.y0$cpue), square = 5)
+
+## LL YEAR with ZERO and NA
+long.line.y0na <- long.line.y0
+## -27.5/-37.5 (2002)
+long.line.y0na$cpue[26] <- NA
+## -37.5/-32.5 (2005)
+long.line.y0na$cpue[72] <- NA
+levelmap(cpue ~ lon + lat | year, data = long.line.y0na,
+         xlim = c(-60, -20), ylim = c(-50, -10),
+         key.space = "right", database = "world",
+         breaks = pretty(long.line.y0na$cpue), square = 5)
+
+## LL YEAR-QUARTER
+levelmap(cpue ~ lon + lat | year + quarter, data = LL.data.yq,
+         xlim = c(-60, -20), ylim = c(-50, -10),
+         key.space = "right", database = "world",
+         breaks = pretty(LL.data.yq$cpue), square = 5)
+
+## LL YEAR-QUARTER with ZERO
+str(LL.data.yq)
+set.seed(1982)
+idx <- sample(nrow(LL.data.yq), size = 18)
+long.line.yq0 <- LL.data.yq
+long.line.yq0$cpue[idx] <- 0 # alguns ficaram escondidos
+levelmap(cpue ~ lon + lat | year + quarter, data = long.line.yq0,
+         xlim = c(-60, -20), ylim = c(-50, -10),
+         key.space = "right", database = "world",
+         breaks = pretty(long.line.yq0$cpue), square = 5)
+
+## LL YEAR-QUARTER with ZERO and NA
+long.line.yq0na <- long.line.yq0
+## -32.5/-47.5 (2002/3)
+long.line.yq0na$cpue[64] <- NA
+## -32.5/-32.5 (2005/1)
+long.line.yq0na$cpue[154] <- NA
+levelmap(cpue ~ lon + lat | year + quarter, data = long.line.yq0na,
+         xlim = c(-60, -20), ylim = c(-50, -10),
+         key.space = "right", database = "world",
+         breaks = pretty(long.line.yq0na$cpue), square = 5)
+##----------------------------------------------------------------------
+
+
+##----------------------------------------------------------------------
+## Base de dados para o mapa
+library(maps)
+library(mapdata)
+mm <- map("world", plot = FALSE, fill = TRUE)
+##----------------------------------------------------------------------
