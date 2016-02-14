@@ -7,3 +7,4 @@ TODO.md
 ^playground$
 ^data-raw$
 ^\.#*
+buildPkg.R
