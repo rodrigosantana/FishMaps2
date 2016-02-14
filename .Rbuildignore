@@ -1,4 +1,5 @@
 README.md
+README.Rmd
 TODO.md
 .gitignore
 .Rprofile
@@ -8,3 +9,4 @@ TODO.md
 ^data-raw$
 ^\.#*
 buildPkg.R
+^downloads$
