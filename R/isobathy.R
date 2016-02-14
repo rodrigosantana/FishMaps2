@@ -10,6 +10,6 @@ isobathy <- function(database) {
     temp <- expand.grid(iso$x, iso$y)
     temp2 <- data.frame(matrix(unlist(iso$z)))
     res <- data.frame(lat = temp[,2], lon = temp[,1], prof = temp2[,1])
-    res <- subset(res, subset = prof <= 0)
+    res <- res[res$prof <= 0, ]
     return(res)
 }
