@@ -1,30 +1,33 @@
 ##======================================================================
-## This is the main development file for FishMaps. Everything here is
+## This is the main development file for FishMaps2. Everything here is
 ## experimental and is used for tests and examples.
 ##======================================================================
 
-## Para carregar as funcoes (simula o pacote instalado e carregado)
-devtools::load_all()
-## Para atualizar a documentacao
-devtools::document()
-## Para conferir a documantacao
-devtools::check_man()
-## Para conferir o pacote completo
-devtools::check(cleanup = FALSE, check_dir = "../")
-
-## testando a funcao levelmap
-args(levelmap)
+## testando a funcao tilemap
+args(tilemap)
 
 ##----------------------------------------------------------------------
 ## Bait Boat
 ##----------------------------------------------------------------------
 
-## BB YEAR
-levelmap(cpue ~ lon + lat | year, data = BB.data.y,
+tilemap(x = "lon", y = "lat", z = "cpue", data = BB.data.y,
          xlim = c(-60, -40), ylim = c(-35, -20),
-         key.space = "right", database = "world",
-         breaks = pretty(BB.data.y$cpue), square = 1,
-         col.land = "darkgrey")
+        database = "world")
+
+tilemap(x = "lon", y = "lat", z = "cpue",
+        facet = "~quarter", data = BB.data.yq,
+        xlim = c(-60, -40), ylim = c(-35, -20),
+        database = "world")
+
+tilemap(x = "lon", y = "lat", z = "cpue",
+        data = BB.data.y, bathymetry = TRUE,
+        xlim = c(-60, -40), ylim = c(-35, -20),
+        database = "world")
+
+tilemap(x = "lon", y = "lat", z = "cpue",
+        facet = "~quarter", data = BB.data.yq,
+        xlim = c(-60, -40), ylim = c(-35, -20),
+        database = "world", bathymetry = TRUE)
 
 ## BB YEAR with ZERO
 str(BB.data.y)
@@ -32,10 +35,9 @@ set.seed(1982)
 idx <- sample(nrow(BB.data.y), size = 8)
 bait.boat.y0 <- BB.data.y
 bait.boat.y0$cpue[idx] <- 0
-levelmap(cpue ~ lon + lat | year, data = bait.boat.y0,
-         xlim = c(-60, -40), ylim = c(-35, -20),
-         key.space = "right", database = "world",
-         breaks = pretty(bait.boat.y0$cpue), square = 1)
+tilemap(x = "lon", y = "lat", z = "cpue", data = bait.boat.y0,
+        xlim = c(-60, -40), ylim = c(-35, -20),
+        database = "world")
 
 ## BB YEAR with ZERO and NA
 bait.boat.y0na <- bait.boat.y0
@@ -43,16 +45,18 @@ bait.boat.y0na <- bait.boat.y0
 bait.boat.y0na$cpue[9] <- NA
 ## -23.5/-41.5 (2002)
 bait.boat.y0na$cpue[28] <- NA
-levelmap(cpue ~ lon + lat | year, data = bait.boat.y0na,
-         xlim = c(-60, -40), ylim = c(-35, -20),
-         key.space = "right", database = "world",
-         breaks = pretty(bait.boat.y0na$cpue), square = 1)
+tilemap(x = "lon", y = "lat", z = "cpue", data = bait.boat.y0na,
+        xlim = c(-60, -40), ylim = c(-35, -20),
+        database = "world")
 
-## BB YEAR-QUARTER
-levelmap(cpue ~ lon + lat | year + quarter, data = BB.data.yq,
-         xlim = c(-60, -40), ylim = c(-35, -20),
-         key.space = "right", database = "world",
-         breaks = pretty(BB.data.yq$cpue), square = 1)
+## Para comparar os quadrados com zero e NA
+tilemap(x = "lon", y = "lat", z = "cpue", data = bait.boat.y0,
+        xlim = c(-60, -40), ylim = c(-35, -20),
+        database = "world", facet = "~year")
+dev.new()
+tilemap(x = "lon", y = "lat", z = "cpue", data = bait.boat.y0na,
+        xlim = c(-60, -40), ylim = c(-35, -20),
+        database = "world", facet = "~year")
 
 ## BB YEAR-QUARTER with ZERO
 str(BB.data.yq)
@@ -80,6 +84,23 @@ levelmap(cpue ~ lon + lat | year + quarter, data = bait.boat.yq0na,
 ##----------------------------------------------------------------------
 ## Long Line
 ##----------------------------------------------------------------------
+
+tilemap(x = "lon", y = "lat", z = "cpue", data = LL.data.y,
+         xlim = c(-60, -20), ylim = c(-50, -10),
+        database = "world")
+
+tilemap(x = "lon", y = "lat", z = "cpue", data = LL.data.yq,
+         xlim = c(-60, -20), ylim = c(-50, -10),
+        database = "world", facet = "~quarter")
+
+tilemap(x = "lon", y = "lat", z = "cpue", data = LL.data.y,
+         xlim = c(-60, -20), ylim = c(-50, -10),
+        database = "world", bathymetry = TRUE)
+
+tilemap(x = "lon", y = "lat", z = "cpue", data = LL.data.yq,
+         xlim = c(-60, -20), ylim = c(-50, -10),
+        database = "world", facet = "~quarter",
+        bathymetry = TRUE)
 
 ## LL YEAR
 levelmap(cpue ~ lon + lat | year, data = LL.data.y,
