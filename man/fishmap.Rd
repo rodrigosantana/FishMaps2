@@ -5,25 +5,25 @@
 \alias{tilemap}
 \title{Plots fishery data into maps}
 \usage{
-tilemap(x, y, fill, facetplot, dat, basemap, xlim, ylim, col.grd, bathymetry,
-  ...)
+tilemap(x, y, z, data, facet = NULL, xlim, ylim, col.fill = c("gray70",
+  "gray10"), database = c("world", "worldHires"), bathymetry = FALSE, ...)
 }
 \arguments{
 \item{x}{A vector of coordinates (longitude)}
 
 \item{y}{A vector of coordinates (latitude)}
 
-\item{fill}{A numeric vector with data to fill in the map}
+\item{z}{A numeric vector with data to fill in the map}
 
-\item{facetplot}{wtf}
+\item{data}{The data frame containing the data}
 
-\item{dat}{The data frame containing the data}
-
-\item{basemap}{The map datbase (from package \code{mapdata})}
+\item{facet}{wtf}
 
 \item{xlim, ylim}{X (longitude) and Y (latitude) limits of the map}
 
-\item{col.grd}{The color of the grid}
+\item{col.fill}{The color of the grid}
+
+\item{database}{The map datbase (from package \code{mapdata})}
 
 \item{bathymetry}{A logical indicating if bathymetry lines should be
 included}

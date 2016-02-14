@@ -4,8 +4,10 @@
 \name{FishMaps2}
 \alias{FishMaps2}
 \alias{FishMaps2-package}
-\title{Proportional symbol mapping for fishery data in batch mode}
+\title{Plots Fishery Data into Maps.}
 \description{
-Proportional symbol mapping for fishery data in batch mode (ggplot2 version)
+Plots georeferenced fishery data (e.g. catch, effort
+and CPUE) into maps. This is the lattice version of a previous
+FishMaps version based on traditional grid graphics.
 }
 

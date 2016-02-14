@@ -1,108 +1,110 @@
-#' @title Proportional symbol mapping for fishery data in batch mode
-#'
-#' @description Proportional symbol mapping for fishery data in batch mode (ggplot2 version)
-#'
-#' @docType package
-#' @name FishMaps2
+##' @title Plots Fishery Data into Maps.
+##'
+##' @description Plots georeferenced fishery data (e.g. catch, effort
+##' and CPUE) into maps. This is the lattice version of a previous
+##' FishMaps version based on traditional grid graphics.
+##'
+##' @docType package
+##' @name FishMaps2
 NULL
 
-#' @title Blue marlin capture
-#' @name dat.bum
-#'
-#' @description Blue marlin capture by the long-line fleet in Atlantic
-#' Ocean
-#'
-#' @format A data frame with 496 rows and 4 variables:
-#' \itemize{
-#'   \item Quarter: quarter of the year
-#'   \item Lat: latitude centered in the middle of 5x5 squares
-#'   \item Lon: longitude centered in the middle of 5x5 squares
-#'   \item BUM: blue marlin capture
-#' }
-#'
-#' @docType data
-#' @keywords datasets
-#' @usage data(dat.bum)
-#' @source Based in ICCAT public databases
+##' Baitboat yearly aggregated data
+##'
+##' Skipjack tuna CPUE by year, caught by the brazilian baitboat fleet, based
+##' at Itajai (SC) harbor.
+##'
+##' @name BB.data.y
+##' @docType data
+##' @usage data(BB.data.y)
+##' @format A data frame with 56 observations on the following 4 variables:
+##' \itemize{
+##'   \item year: a factor with levels \code{2001}, \code{2002}
+##'   \item lat: a numeric vector
+##'   \item lon: a numeric vector
+##'   \item cpue: a numeric vector
+##' }
+##' @source Actually this is some randomly generated data.
+##' @keywords datasets
+##' @examples
+##'
+##' data(BB.data.y)
+##' str(BB.data.y)
+##'
 NULL
 
-#' @title White marlin capture
-#' @name dat.whm
-#'
-#' @description White marlin capture by the long-line fleet in Atlantic
-#' Ocean
-#'
-#' @format A data frame with 496 rows and 4 variables:
-#' \itemize{
-#'   \item Quarter: quarter of the year
-#'   \item Lat: latitude centered in the middle of 5x5 squares
-#'   \item Lon: longitude centered in the middle of 5x5 squares
-#'   \item WHM: white marlin capture
-#' }
-#'
-#' @docType data
-#' @keywords datasets
-#' @usage data(dat.whm)
-#' @source Based in ICCAT public databases
+##' Baitboat quarterly aggregated data
+##'
+##' Skipjack tuna CPUE by quarter and year, caught by the brazilian baitboat
+##' fleet, based at Itajai (SC) harbor.
+##'
+##' @name BB.data.yq
+##' @docType data
+##' @usage data(BB.data.yq)
+##' @format A data frame with 120 observations on the following 5 variables:
+##' \itemize{
+##'   \item year: a factor with levels \code{2001}, \code{2002}
+##'   \item quarter: a factor with levels \code{1}, \code{2}, \code{3}, \code{4}
+##'   \item lat: a numeric vector
+##'   \item lon: a numeric vector
+##'   \item cpue: a numeric vector
+##' }
+##' @source Actually this is some randomly generated data.
+##' @keywords datasets
+##' @examples
+##'
+##' data(BB.data.yq)
+##' str(BB.data.yq)
+##'
 NULL
 
-#' @title White marlin and blue marlin capture
-#' @name dat.whm.bum
-#'
-#' @description White marlin and blue marlin capture by the long-line
-#' fleet in Atlantic Ocean. (These are the same data contained in
-#' \code{dat.whm} and \code{dat.bum} separately).
-#'
-#' @format A data frame with 496 rows and 4 variables:
-#' \itemize{
-#'   \item Quarter: quarter of the year
-#'   \item Lat: latitude centered in the middle of 5x5 squares
-#'   \item Lon: longitude centered in the middle of 5x5 squares
-#'   \item WHM: white marlin capture
-#'   \item BUM: blue marlin capture
-#' }
-#'
-#' @docType data
-#' @keywords datasets
-#' @usage data(dat.whm.bum)
-#' @source Based in ICCAT public databases
+##' Longline yearly aggregated data
+##'
+##' Swordfish CPUE by year, caught by the brazilian longline fleet, based at
+##' Itajai (SC) harbor.
+##'
+##' @name LL.data.y
+##' @docType data
+##' @usage data(LL.data.y)
+##' @format A data frame with 82 observations on the following 4 variables.
+##' \itemize{
+##'   \item year: a factor with levels \code{2001}, \code{2002},
+##'     \code{2003}, \code{2004}, \code{2005}
+##'   \item lat: a numeric vector
+##'   \item lon: a numeric vector
+##'   \item cpue: a numeric vector
+##' }
+##' @source Actually this is some randomly generated data.
+##' @keywords datasets
+##' @examples
+##'
+##' data(LL.data.y)
+##' str(LL.data.y)
+##'
 NULL
 
-#' @title Teste dataset
-#' @name dat.lat
-#'
-#' @description Teste dataset. PLEASE include more information.
-#'
-#' @format A data frame with 496 rows and 4 variables:
-#' \itemize{
-#'   \item Quarter: quarter of the year
-#'   \item Lat: latitude centered in the middle of 5x5 squares
-#'   \item Lon: longitude centered in the middle of 5x5 squares
-#'   \item Catch: some catch
-#' }
-#'
-#' @docType data
-#' @keywords datasets
-#' @usage data(dat.lat)
-#' @source Based in ICCAT public databases
-NULL
-
-#' @title Teste dataset
-#' @name dat.lat.y
-#'
-#' @description Teste dataset. PLEASE include more information.
-#'
-#' @format A data frame with 6557 rows and 5 variables:
-#' \itemize{
-#'   \item Year: year
-#'   \item Quarter: quarter of the year
-#'   \item Lat: latitude centered in the middle of 5x5 squares
-#'   \item Lon: longitude centered in the middle of 5x5 squares
-#'   \item Catch: some catch
-#' }
-#'
-#' @docType data
-#' @keywords datasets
-#' @usage data(dat.lat.y)
-#' @source Based in ICCAT public databases
+##' Longline quarterly aggregated data
+##'
+##' Swordfish CPUE by year and quarter, caught by the brazilian longline fleet,
+##' based at Itajai (SC) harbor.
+##'
+##' @name LL.data.yq
+##' @docType data
+##' @usage data(LL.data.yq)
+##' @format A data frame with 181 observations on the following 5 variables:
+##' \itemize{
+##'   \item year: a factor with levels \code{2001}, \code{2002},
+##'     \code{2003}, \code{2004}, \code{2005}
+##'   \item quarter: a factor with levels \code{1}, \code{2}, \code{3},
+##'     \code{4}
+##' \item lat: a numeric vector
+##' \item lon: a numeric vector
+##' \item cpue a numeric vector
+##' }
+##' @source Actually this is some randomly generated data.
+##' @keywords datasets
+##' @examples
+##'
+##' data(LL.data.yq)
+##' str(LL.data.yq)
+##'
 NULL
