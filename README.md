@@ -1,6 +1,6 @@
 
 
-# FishMaps2 0.0.1
+# FishMaps2 0.1.0
 
 [![Build Status](https://travis-ci.org/rodrigosantana/FishMaps2.svg)](https://travis-ci.org/rodrigosantana/FishMaps2)
 
@@ -25,20 +25,20 @@ library(devtools)
 install_github("rodrigosantana/FishMaps2")
 ```
 
-Alternatively, download the package tarball: [FishMaps2_0.0.1.tar.gz][]
+Alternatively, download the package tarball: [FishMaps2_0.1.0.tar.gz][]
 and run from a UNIX terminal (make sure you are on the container file
 directory):
 
 
 ```
-R CMD INSTALL -l /path/to/your/R/library FishMaps2_0.0.1.tar.gz
+R CMD INSTALL -l /path/to/your/R/library FishMaps2_0.1.0.tar.gz
 ```
 
 Or, inside an `R` session:
 
 
 ```
-install.packages("FishMaps2_0.0.1.tar.gz", repos = NULL,
+install.packages("FishMaps2_0.1.0.tar.gz", repos = NULL,
                  lib.loc = "/path/to/your/R/library",
                  dependencies = TRUE)
 ```
@@ -50,13 +50,13 @@ library.
 
 ### Windows
 
-Download Windows binary version: [FishMaps2_0.0.1.zip][] (**do not unzip
+Download Windows binary version: [FishMaps2_0.1.0.zip][] (**do not unzip
 it under Windows**), put the file in your working directory, and from
 inside `R`:
 
 
 ```
-install.packages("FishMaps2_0.0.1.zip", repos = NULL,
+install.packages("FishMaps2_0.1.0.zip", repos = NULL,
                  dependencies = TRUE)
 ```
 
@@ -72,6 +72,6 @@ This package is released under the
 
 
 
-[FishMaps2_0.0.1.tar.gz]: https://github.com/rodrigosantana/FishMaps2/blob/master/downloads/FishMaps2_0.0.1.tar.gz?raw=true
-[FishMaps2_0.0.1.zip]: https://github.com/rodrigosantana/FishMaps2/blob/master/downloads/FishMaps2_0.0.1.zip?raw=true
+[FishMaps2_0.1.0.tar.gz]: https://github.com/rodrigosantana/FishMaps2/blob/master/downloads/FishMaps2_0.1.0.tar.gz?raw=true
+[FishMaps2_0.1.0.zip]: https://github.com/rodrigosantana/FishMaps2/blob/master/downloads/FishMaps2_0.1.0.zip?raw=true
 [FishMaps2-manual.pdf]: https://github.com/rodrigosantana/FishMaps2/raw/master/downloads/FishMaps2-manual.pdf
