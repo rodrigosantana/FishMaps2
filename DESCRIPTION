@@ -1,6 +1,6 @@
 Package: FishMaps2
 Title: Proportional symbol mapping for fishery data in batch mode
-Version: 0.0.1
+Version: 0.1.0
 Authors@R: c(
     person("Rodrigo", "Sant'Ana", email = "ocrodrigosantana@gmail.com", role =c("aut", "cre")),
     person("Fernando", "Mayer", email = "fernandomayer@gmail.com", role = "aut"))
