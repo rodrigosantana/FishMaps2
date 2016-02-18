@@ -4,7 +4,7 @@
 \alias{tilemap}
 \title{Plots fishery data into maps}
 \usage{
-tilemap(x, y, z, data, facet = NULL, xlim, ylim, col.fill = c("gray70",
+tilemap(x, y, z, data, facet.opt = NULL, xlim, ylim, col.fill = c("gray70",
   "gray10"), database = c("world", "worldHires"), bathymetry = FALSE, ...)
 }
 \arguments{
@@ -16,7 +16,7 @@ tilemap(x, y, z, data, facet = NULL, xlim, ylim, col.fill = c("gray70",
 
 \item{data}{The data frame containing the data}
 
-\item{facet}{wtf}
+\item{facet.opt}{A list containing options to facet plots}
 
 \item{xlim, ylim}{X (longitude) and Y (latitude) limits of the map}
 

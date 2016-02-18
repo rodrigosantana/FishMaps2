@@ -8,7 +8,7 @@
 #' @param y A vector of coordinates (latitude)
 #' @param z A numeric vector with data to fill in the map
 #' @param data The data frame containing the data
-#' @param facet wtf
+#' @param facet.opt A list containing options to facet plots
 #' @param xlim,ylim X (longitude) and Y (latitude) limits of the map
 #' @param col.fill The color of the grid
 #' @param database The map datbase (from package \code{mapdata})
@@ -23,7 +23,7 @@
 #'
 #' @import ggplot2 maps mapdata marelac
 #' @export
-tilemap <- function(x, y, z, data, facet = NULL, xlim, ylim,
+tilemap <- function(x, y, z, data, facet.opt = NULL, xlim, ylim,
                     col.fill = c("gray70", "gray10"),
                     database = c("world", "worldHires"),
                     bathymetry = FALSE, ...){
@@ -61,7 +61,7 @@ tilemap <- function(x, y, z, data, facet = NULL, xlim, ylim,
             add <- isobathy(database = marelac::Bathymetry)
             mm <- database
             ggplot(data = data, aes_string(x = x, y = y)) +
-                facet_wrap(as.formula(facet), ncol = 2) +
+                facet_wrap(as.formula(facet.opt$facet), ncol = facet.opt$ncol) +
                 geom_tile(data = data, aes_string(fill = z)) +
                 scale_fill_gradient("", low = col.fill[1], high = col.fill[2]) +
                 geom_polygon(data = mm, aes_string(x = "long", y = "lat",
@@ -74,7 +74,7 @@ tilemap <- function(x, y, z, data, facet = NULL, xlim, ylim,
         } else {
             mm <- database
             ggplot(data = data, aes_string(x = x, y = y)) +
-                facet_wrap(as.formula(facet), ncol = 2) +
+                facet_wrap(as.formula(facet.opt$facet), ncol = facet.opt$ncol) +
                 geom_tile(data = data, aes_string(fill = z)) +
                 scale_fill_gradient("", low = col.fill[1], high = col.fill[2]) +
                 geom_polygon(data = mm, aes_string(x = "long", y = "lat", group = "group")) +
