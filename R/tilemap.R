@@ -32,7 +32,7 @@ tilemap <- function(x, y, z, data, facet.opt = NULL, xlim, ylim,
     switch(database,
            world = database <- map_data("world"),
            worldHires = database <- map_data("worldHires"))
-    if(is.null(facet)) {
+    if(is.null(facet.opt)) {
         if(bathymetry) {
             add <- isobathy(database = marelac::Bathymetry)
             mm <- database

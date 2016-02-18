@@ -11,8 +11,17 @@ args(tilemap)
 ##----------------------------------------------------------------------
 
 tilemap(x = "lon", y = "lat", z = "cpue", data = BB.data.y,
-         xlim = c(-60, -40), ylim = c(-35, -20),
+        xlim = c(-60, -40), ylim = c(-35, -20),
         database = "world")
+
+ggplot(data = BB.data.y, aes_string(x = "lon", y = "lat")) +
+    geom_tile(data = BB.data.y, aes_string(fill = "cpue")) +
+    scale_fill_gradient("", low = col.fill[1], high = col.fill[2]) +
+    geom_polygon(data = mm, aes_string(x = "long", y = "lat", group = "group")) +
+    coord_fixed(xlim = xlim, ylim = ylim) +
+    xlab(expression(paste("Longitude ", "(", degree, ")"))) +
+    ylab(expression(paste("Latitude ", "(", degree, ")")))
+
 
 tilemap(x = "lon", y = "lat", z = "cpue",
         facet = "~quarter", data = BB.data.yq,
