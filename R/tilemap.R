@@ -38,22 +38,22 @@ tilemap <- function(x, y, z, data, facet = NULL, xlim, ylim,
             mm <- database
             ggplot(data = data, aes_string(x = x, y = y)) +
                 geom_tile(data = data, aes_string(fill = z)) +
-                scale_fill_gradient(low = col.fill[1], high = col.fill[2]) +
+                scale_fill_gradient("", low = col.fill[1], high = col.fill[2]) +
                 geom_polygon(data = mm, aes_string(x = "long", y = "lat",
                                                    group = "group")) +
                 geom_contour(data = add, aes_string(x = "lon", y = "lat", z = "prof"),
                              alpha = .2, breaks = seq(0, -7000, -1000)) +
-              coord_fixed(xlim = xlim, ylim = ylim) +
+                coord_fixed(xlim = xlim, ylim = ylim) +
                 xlab(expression(paste("Longitude ", "(", degree, ")"))) +
                 ylab(expression(paste("Latitude ", "(", degree, ")")))
         } else {
             mm <- database
             ggplot(data = data, aes_string(x = x, y = y)) +
                 geom_tile(data = data, aes_string(fill = z)) +
-                scale_fill_gradient(low = col.fill[1], high = col.fill[2]) +
+                scale_fill_gradient("", low = col.fill[1], high = col.fill[2]) +
                 geom_polygon(data = mm, aes_string(x = "long", y = "lat", group = "group")) +
                 coord_fixed(xlim = xlim, ylim = ylim) +
-              xlab(expression(paste("Longitude ", "(", degree, ")"))) +
+                xlab(expression(paste("Longitude ", "(", degree, ")"))) +
                 ylab(expression(paste("Latitude ", "(", degree, ")")))
         }
     } else {
@@ -63,7 +63,7 @@ tilemap <- function(x, y, z, data, facet = NULL, xlim, ylim,
             ggplot(data = data, aes_string(x = x, y = y)) +
                 facet_wrap(as.formula(facet), ncol = 2) +
                 geom_tile(data = data, aes_string(fill = z)) +
-                scale_fill_gradient(low = col.fill[1], high = col.fill[2]) +
+                scale_fill_gradient("", low = col.fill[1], high = col.fill[2]) +
                 geom_polygon(data = mm, aes_string(x = "long", y = "lat",
                                                    group = "group")) +
                 geom_contour(data = add, aes_string(x = "lon", y = "lat", z = "prof"),
@@ -76,7 +76,7 @@ tilemap <- function(x, y, z, data, facet = NULL, xlim, ylim,
             ggplot(data = data, aes_string(x = x, y = y)) +
                 facet_wrap(as.formula(facet), ncol = 2) +
                 geom_tile(data = data, aes_string(fill = z)) +
-                scale_fill_gradient(low = col.fill[1], high = col.fill[2]) +
+                scale_fill_gradient("", low = col.fill[1], high = col.fill[2]) +
                 geom_polygon(data = mm, aes_string(x = "long", y = "lat", group = "group")) +
                 coord_fixed(xlim = xlim, ylim = ylim) +
                 xlab(expression(paste("Longitude ", "(", degree, ")"))) +
