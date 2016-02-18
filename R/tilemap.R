@@ -8,7 +8,8 @@
 #' @param y A vector of coordinates (latitude)
 #' @param z A numeric vector with data to fill in the map
 #' @param data The data frame containing the data
-#' @param facet.opt A list containing options to facet plots
+#' @param facet.opt A list containing options to facet plots list(facet
+#'     = "~COLUMN NAME", ncol = number of columns to break plot)
 #' @param xlim,ylim X (longitude) and Y (latitude) limits of the map
 #' @param col.fill The color of the grid
 #' @param database The map datbase (from package \code{mapdata})

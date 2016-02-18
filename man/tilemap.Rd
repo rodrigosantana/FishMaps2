@@ -16,7 +16,8 @@ tilemap(x, y, z, data, facet.opt = NULL, xlim, ylim, col.fill = c("gray70",
 
 \item{data}{The data frame containing the data}
 
-\item{facet.opt}{A list containing options to facet plots}
+\item{facet.opt}{A list containing options to facet plots list(facet
+= "~COLUMN NAME", ncol = number of columns to break plot)}
 
 \item{xlim, ylim}{X (longitude) and Y (latitude) limits of the map}
 
