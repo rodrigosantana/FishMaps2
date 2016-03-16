@@ -60,6 +60,11 @@ install.packages("FishMaps2_0.1.0.zip", repos = NULL,
                  dependencies = TRUE)
 ```
 
+## Authors
+
+- [Rodrigo Sant'Ana](http://rodrigosantana.github.io) (CTTMar/UNIVALI)
+- [Fernando Mayer](http://www.leg.ufpr.br/~fernandomayer) (LEG/UFPR)
+
 ## Documentation
 
 The reference manual in PDF can be found here: [FishMaps2-manual.pdf][]
